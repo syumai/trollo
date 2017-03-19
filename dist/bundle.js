@@ -14089,8 +14089,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 _vue2.default.use(_vuex2.default);
 
+var savedLists = localStorage.getItem('trollo-lists');
+
 var state = {
-  lists: [{
+  lists: savedLists ? JSON.parse(savedLists) : [{
     title: 'To Do',
     cards: [{ body: 'English' }, { body: 'Mathematics' }]
   }, {
@@ -14136,11 +14138,19 @@ var getters = {
   }
 };
 
-exports.default = new _vuex2.default.Store({
+var store = new _vuex2.default.Store({
   state: state,
   mutations: mutations,
   getters: getters
 });
+
+store.subscribe(function (mutation, _ref6) {
+  var lists = _ref6.lists;
+
+  localStorage.setItem('trollo-lists', JSON.stringify(lists));
+});
+
+exports.default = store;
 
 /***/ }),
 /* 125 */

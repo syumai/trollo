@@ -5,8 +5,10 @@ Vue.use(Vuex);
 
 import * as types from './mutation-types';
 
+const savedLists = localStorage.getItem('trollo-lists');
+
 const state = {
-  lists: [
+  lists: savedLists ? JSON.parse(savedLists) : [
     {
       title: 'To Do',
       cards: [
@@ -51,8 +53,14 @@ const getters = {
   listsCount: (state) => state.lists.length
 }
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state,
   mutations,
   getters,
 });
+
+store.subscribe((mutation, { lists }) => {
+  localStorage.setItem('trollo-lists', JSON.stringify(lists));
+});
+
+export default store;
