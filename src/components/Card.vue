@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" draggable="true" @dragstart="onDragStart">
     <div class="close-button" @click="removeCardFromList">
       x
     </div>
@@ -59,6 +59,10 @@ const Card = {
         });
       }
     },
+    onDragStart({ dataTransfer }) {
+      dataTransfer.effectAllowed = 'move';
+      dataTransfer.setData("application/json", JSON.stringify({ from: this.$parent.index, cardIndex: this.index }));
+    },
     ...mapMutations({
       moveCardToList: types.MOVE_CARD_TO_LIST
     })
@@ -78,6 +82,7 @@ export default Card;
   background-color: #fff;
   border-radius: 8px;
   width: calc(100% - 30px);
+  cursor: pointer;
 
   .close-button {
     position: absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="list">
+  <div class="list" @drop="onDrop" @dragover.prevent @dragenter.prevent>
     <div class="close-button" @click="removeList">
       x
     </div>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import Card from './Card';
 import CardDraft from './CardDraft';
 
@@ -36,7 +36,18 @@ const List = {
       this.$store.commit(types.REMOVE_LIST, {
         listIndex: this.index
       });
-    }
+    },
+    onDrop({ dataTransfer }) {
+      const { from, cardIndex } = JSON.parse(dataTransfer.getData("application/json"));
+      this.moveCardToList({
+        from,
+        to: this.index,
+        cardIndex
+      });
+    },
+    ...mapMutations({
+      moveCardToList: types.MOVE_CARD_TO_LIST
+    })
   }
 }
 
