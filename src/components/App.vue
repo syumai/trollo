@@ -1,7 +1,9 @@
 <template>
   <div class="app">
     <header>
-      <h1 class="logo">Trollo</h1>
+      <a href="https://github.com/syumai/trollo">
+        <h1 class="logo">Trollo</h1>
+      </a>
     </header>
     <main>
       <list v-for="({ title, cards }, index) in lists" :title="title" :cards="cards" :index="index"></list>
@@ -72,11 +74,20 @@ h1, h2, h3, h4 {
     width: calc(100% - 40px);
     height: 100px;
 
-    h1.logo {
-      font-family: 'Pacifico', cursive;
-      font-weight: normal;
-      font-size: 48px;
-      color: #fff;
+    a {
+      text-decoration: none;
+      h1.logo {
+        font-family: 'Pacifico', cursive;
+        font-weight: normal;
+        font-size: 48px;
+        color: #fff;
+      }
+    }
+
+    a:hover {
+      h1.logo {
+        opacity: 0.7;
+      }
     }
   }
 

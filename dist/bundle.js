@@ -14218,6 +14218,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 var _List = __webpack_require__(324);
 
@@ -20722,7 +20724,7 @@ exports = module.exports = __webpack_require__(45)(undefined);
 
 
 // module
-exports.push([module.i, "\n.app[data-v-628bdcf4] {\n  font-family: \"Noto Sans Japanese\", \"Noto Sans\", sans-serif;\n  font-weight: 700;\n  color: #242424;\n  width: 100%;\n  height: 100%;\n}\n.app header[data-v-628bdcf4] {\n    padding: 0 20px;\n    display: flex;\n    align-items: center;\n    width: calc(100% - 40px);\n    height: 100px;\n}\n.app header h1.logo[data-v-628bdcf4] {\n      font-family: 'Pacifico', cursive;\n      font-weight: normal;\n      font-size: 48px;\n      color: #fff;\n}\n.app main[data-v-628bdcf4] {\n    padding: 0 20px;\n    display: flex;\n    overflow-x: scroll;\n    width: calc(100% - 40px);\n    height: calc(100% - 100px);\n}\n", ""]);
+exports.push([module.i, "\n.app[data-v-628bdcf4] {\n  font-family: \"Noto Sans Japanese\", \"Noto Sans\", sans-serif;\n  font-weight: 700;\n  color: #242424;\n  width: 100%;\n  height: 100%;\n}\n.app header[data-v-628bdcf4] {\n    padding: 0 20px;\n    display: flex;\n    align-items: center;\n    width: calc(100% - 40px);\n    height: 100px;\n}\n.app header a[data-v-628bdcf4] {\n      text-decoration: none;\n}\n.app header a h1.logo[data-v-628bdcf4] {\n        font-family: 'Pacifico', cursive;\n        font-weight: normal;\n        font-size: 48px;\n        color: #fff;\n}\n.app header a:hover h1.logo[data-v-628bdcf4] {\n      opacity: 0.7;\n}\n.app main[data-v-628bdcf4] {\n    padding: 0 20px;\n    display: flex;\n    overflow-x: scroll;\n    width: calc(100% - 40px);\n    height: calc(100% - 100px);\n}\n", ""]);
 
 // exports
 
@@ -22097,9 +22099,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })
   }), _vm._v(" "), _c('list-draft')], 2)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('header', [_c('h1', {
+  return _c('header', [_c('a', {
+    attrs: {
+      "href": "https://github.com/syumai/trollo"
+    }
+  }, [_c('h1', {
     staticClass: "logo"
-  }, [_vm._v("Trollo")])])
+  }, [_vm._v("Trollo")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
