@@ -14307,18 +14307,28 @@ var Card = {
     moveCardToRight: function moveCardToRight() {
       if (this.movableToRight) {
         this.moveCardToList({
-          from: this.$parent.index,
-          to: this.$parent.index + 1,
-          cardIndex: this.index
+          from: {
+            listIndex: this.$parent.index,
+            cardIndex: this.index
+          },
+          to: {
+            listIndex: this.$parent.index + 1,
+            cardIndex: null
+          }
         });
       }
     },
     moveCardToLeft: function moveCardToLeft() {
       if (this.movableToLeft) {
         this.moveCardToList({
-          from: this.$parent.index,
-          to: this.$parent.index - 1,
-          cardIndex: this.index
+          from: {
+            listIndex: this.$parent.index,
+            cardIndex: this.index
+          },
+          to: {
+            listIndex: this.$parent.index - 1,
+            cardIndex: null
+          }
         });
       }
     },
@@ -14326,7 +14336,24 @@ var Card = {
       var dataTransfer = _ref.dataTransfer;
 
       dataTransfer.effectAllowed = 'move';
-      dataTransfer.setData("application/json", JSON.stringify({ from: this.$parent.index, cardIndex: this.index }));
+      dataTransfer.setData("application/json", JSON.stringify({
+        from: {
+          listIndex: this.$parent.index,
+          cardIndex: this.index
+        }
+      }));
+    },
+    onDrop: function onDrop(_ref2) {
+      var dataTransfer = _ref2.dataTransfer;
+
+      var _JSON$parse = JSON.parse(dataTransfer.getData("application/json")),
+          from = _JSON$parse.from;
+
+      var to = {
+        listIndex: this.$parent.index,
+        cardIndex: this.index
+      };
+      this.moveCardToList({ from: from, to: to });
     }
   }, (0, _vuex.mapMutations)({
     moveCardToList: types.MOVE_CARD_TO_LIST
@@ -14345,6 +14372,18 @@ exports.default = Card;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _vuex = __webpack_require__(52);
 
 var _mutationTypes = __webpack_require__(47);
 
@@ -14381,7 +14420,7 @@ var CardDraft = {
       return this.bodyExists;
     }
   },
-  methods: {
+  methods: _extends({
     startEditing: function startEditing() {
       this.isEditing = true;
     },
@@ -14394,17 +14433,23 @@ var CardDraft = {
         body: this.body
       });
       this.body = '';
+    },
+    onDrop: function onDrop(_ref) {
+      var dataTransfer = _ref.dataTransfer;
+
+      var _JSON$parse = JSON.parse(dataTransfer.getData("application/json")),
+          from = _JSON$parse.from;
+
+      var to = {
+        listIndex: this.$parent.index,
+        cardIndex: null
+      };
+      this.moveCardToList({ from: from, to: to });
     }
-  }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
+  }, (0, _vuex.mapMutations)({
+    moveCardToList: types.MOVE_CARD_TO_LIST
+  }))
+};
 
 exports.default = CardDraft;
 
@@ -14418,22 +14463,6 @@ exports.default = CardDraft;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 var _vuex = __webpack_require__(52);
 
@@ -14453,6 +14482,22 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 var List = {
   props: ['title', 'cards', 'index'],
   components: {
@@ -14464,28 +14509,13 @@ var List = {
       return this.cards.length;
     }
   },
-  methods: _extends({
+  methods: {
     removeList: function removeList() {
       this.$store.commit(types.REMOVE_LIST, {
         listIndex: this.index
       });
-    },
-    onDrop: function onDrop(_ref) {
-      var dataTransfer = _ref.dataTransfer;
-
-      var _JSON$parse = JSON.parse(dataTransfer.getData("application/json")),
-          from = _JSON$parse.from,
-          cardIndex = _JSON$parse.cardIndex;
-
-      this.moveCardToList({
-        from: from,
-        to: this.index,
-        cardIndex: cardIndex
-      });
     }
-  }, (0, _vuex.mapMutations)({
-    moveCardToList: types.MOVE_CARD_TO_LIST
-  }))
+  }
 };
 
 exports.default = List;
@@ -14631,12 +14661,15 @@ var mutations = (_mutations = {}, _defineProperty(_mutations, types.ADD_LIST, fu
   state.lists[from].cards.splice(cardIndex, 1);
 }), _defineProperty(_mutations, types.MOVE_CARD_TO_LIST, function (state, _ref5) {
   var from = _ref5.from,
-      to = _ref5.to,
-      cardIndex = _ref5.cardIndex;
+      to = _ref5.to;
 
-  var targetCard = state.lists[from].cards[cardIndex];
-  state.lists[from].cards.splice(cardIndex, 1);
-  state.lists[to].cards.push(targetCard);
+  var targetCard = state.lists[from.listIndex].cards[from.cardIndex];
+  state.lists[from.listIndex].cards.splice(from.cardIndex, 1);
+  if (to.cardIndex !== null) {
+    state.lists[to.listIndex].cards.splice(to.cardIndex, 0, targetCard);
+  } else {
+    state.lists[to.listIndex].cards.push(targetCard);
+  }
 }), _mutations);
 
 var getters = {
@@ -21990,11 +22023,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "list",
     on: {
-      "drop": _vm.onDrop,
       "dragover": function($event) {
-        $event.preventDefault();
-      },
-      "dragenter": function($event) {
         $event.preventDefault();
       }
     }
@@ -22037,6 +22066,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "submit": function($event) {
         $event.preventDefault();
         _vm.addCardToList($event)
+      },
+      "drop": _vm.onDrop,
+      "dragover": function($event) {
+        $event.preventDefault();
       }
     }
   }, [_c('input', {
@@ -22126,7 +22159,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "draggable": "true"
     },
     on: {
-      "dragstart": _vm.onDragStart
+      "drop": _vm.onDrop,
+      "dragstart": _vm.onDragStart,
+      "dragover": function($event) {
+        $event.preventDefault();
+      }
     }
   }, [_c('div', {
     staticClass: "close-button",

@@ -1,5 +1,5 @@
 <template>
-  <div class="card" draggable="true" @dragstart="onDragStart">
+  <div class="card" draggable="true" @drop="onDrop" @dragstart="onDragStart" @dragover.prevent>
     <div class="close-button" @click="removeCardFromList">
       x
     </div>
@@ -44,24 +44,47 @@ const Card = {
     moveCardToRight() {
       if(this.movableToRight) {
         this.moveCardToList({
-          from: this.$parent.index,
-          to: this.$parent.index + 1,
-          cardIndex: this.index
+          from: {
+            listIndex: this.$parent.index,
+            cardIndex: this.index
+          },
+          to: {
+            listIndex: this.$parent.index + 1,
+            cardIndex: null
+          }
         });
       }
     },
     moveCardToLeft() {
       if(this.movableToLeft) {
         this.moveCardToList({
-          from: this.$parent.index,
-          to: this.$parent.index - 1,
-          cardIndex: this.index
+          from: {
+            listIndex: this.$parent.index,
+            cardIndex: this.index
+          },
+          to: {
+            listIndex: this.$parent.index - 1,
+            cardIndex: null
+          }
         });
       }
     },
     onDragStart({ dataTransfer }) {
       dataTransfer.effectAllowed = 'move';
-      dataTransfer.setData("application/json", JSON.stringify({ from: this.$parent.index, cardIndex: this.index }));
+      dataTransfer.setData("application/json", JSON.stringify({
+        from: {
+          listIndex: this.$parent.index,
+          cardIndex: this.index
+        }
+      }));
+    },
+    onDrop({ dataTransfer }) {
+      const { from } = JSON.parse(dataTransfer.getData("application/json"));
+      const to = {
+        listIndex: this.$parent.index,
+        cardIndex: this.index
+      }
+      this.moveCardToList({ from, to });
     },
     ...mapMutations({
       moveCardToList: types.MOVE_CARD_TO_LIST

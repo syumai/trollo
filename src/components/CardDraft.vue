@@ -1,5 +1,5 @@
 <template>
-  <form :class="classList" @submit.prevent="addCardToList">
+  <form :class="classList" @submit.prevent="addCardToList" @drop="onDrop" @dragover.prevent>
     <input type="text" class="text-input" contenteditable="true" v-model="body" ref="textInput" placeholder="Add new card" @focusin="startEditing" @focusout="finishEditing">
     <button type="submit" class="add-button" v-if="isEditing || isAddable">
       Add
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import * as types from '../store/mutation-types';
 
 const CardDraft = {
@@ -51,7 +52,18 @@ const CardDraft = {
         body: this.body
       });
       this.body = '';
-    }
+    },
+    onDrop({ dataTransfer }) {
+      const { from } = JSON.parse(dataTransfer.getData("application/json"));
+      const to = {
+        listIndex: this.$parent.index,
+        cardIndex: null
+      }
+      this.moveCardToList({ from, to });
+    },
+    ...mapMutations({
+      moveCardToList: types.MOVE_CARD_TO_LIST
+    })
   }
 }
 

@@ -42,10 +42,14 @@ const mutations = {
   [types.REMOVE_CARD_FROM_LIST](state, { from, cardIndex }) {
     state.lists[from].cards.splice(cardIndex, 1);
   },
-  [types.MOVE_CARD_TO_LIST](state, { from, to, cardIndex }) {
-    const targetCard = state.lists[from].cards[cardIndex];
-    state.lists[from].cards.splice(cardIndex, 1);
-    state.lists[to].cards.push(targetCard);
+  [types.MOVE_CARD_TO_LIST](state, { from, to }) {
+    const targetCard = state.lists[from.listIndex].cards[from.cardIndex];
+    state.lists[from.listIndex].cards.splice(from.cardIndex, 1);
+    if (to.cardIndex !== null) {
+      state.lists[to.listIndex].cards.splice(to.cardIndex, 0, targetCard);
+    } else {
+      state.lists[to.listIndex].cards.push(targetCard);
+    }
   },
 };
 
