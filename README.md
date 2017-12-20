@@ -13,7 +13,7 @@ Lists and cards are saved in `localStorage `.
 ## Development
 
 ```sh
-yarn dev
+yarn dev # => Start running webpack-dev-server
 yarn build
 ```
 
