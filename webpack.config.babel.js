@@ -3,14 +3,18 @@ import path from 'path';
 export default {
   entry: ['babel-polyfill', './src/index.js'],
   output: {
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/dist/',
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.common.js'
+      'vue$': 'vue/dist/vue.common.js',
     }
+  },
+  devServer: {
+    inline: true,
   },
   module: {
     rules: [{

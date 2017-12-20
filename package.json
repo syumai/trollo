@@ -4,8 +4,8 @@
   "description": "Simple Trello clone implemented with Vue.js and Vuex",
   "main": "dist/bundle.js",
   "scripts": {
-    "build": "webpack --progress --colors",
-    "watch": "webpack --progress --colors --watch"
+    "dev": "webpack-dev-server",
+    "build": "webpack --progress --colors"
   },
   "repository": "https://github.com/syumai/trollo",
   "author": "syumai",
