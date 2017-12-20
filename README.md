@@ -17,6 +17,14 @@ yarn watch
 yarn build
 ```
 
+## Run server
+
+```
+yarn webpack-dev-server
+```
+
+
+
 ## License
 
 MIT
