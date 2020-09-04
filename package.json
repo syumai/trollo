@@ -15,7 +15,7 @@
     "@babel/preset-env": "^7.6.0",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.13.1",
     "sass-loader": "^6.0.6",
     "vue": "^2.5.13",
     "vue-loader": "^15.7.1",
